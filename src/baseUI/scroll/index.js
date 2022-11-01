@@ -9,7 +9,7 @@ const ScrollContainer = styled.div`
   overflow: hidden;
 `
 
-function Scroll(props, ref) {
+const Scroll = forwardRef((props, ref) => {
   const { direction, click, refresh, pullUpLoading, pullDownLoading, bounceTop, bounceBottom } = props;
   const { pullUp, pullDown, onScroll } = props;
 
@@ -21,7 +21,7 @@ function Scroll(props, ref) {
   //实例绑定 scroll 事件
   useEffect(() => {
     const scroll = new BScroll(scrollContaninerRef.current, {
-      scrollX: direction === 'horizental',
+      scrollX: direction === 'horizontal',
       scrollY: direction === 'vertical',
       probeType: 3,
       click: click,
@@ -73,6 +73,20 @@ function Scroll(props, ref) {
   }, [pullUp, bScroll]);
 
   useEffect(() => {
+    if(!bScroll || !pullDown) { return };
+    bScroll.on('touchEnd', (pos) => {
+      //判断用户的下拉动作
+      if(pos.y > 50) {
+        pullDown();
+      }
+    });
+    return () => {
+      bScroll.off('touchEnd');
+    }
+  }, [pullDown, bScroll]);
+
+
+  useEffect(() => {
     if(refresh && bScroll){
       bScroll.refresh();
     }
@@ -101,7 +115,7 @@ function Scroll(props, ref) {
       { props.children }
     </ScrollContainer>
   )
-}
+});
 
 
 Scroll.defaultProps = {
@@ -132,4 +146,4 @@ Scroll.propTypes = {
 
 
 // forwardRef 函数组件第二个参数接收ref
-export default forwardRef(Scroll);
+export default Scroll;

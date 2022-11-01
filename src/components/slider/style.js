@@ -9,8 +9,9 @@ export const SliderContainer = styled.div`
   margin: auto;
   .before{
     position: absolute;
-    /* top: -300px; */
-    height: 110px;
+    /* 为了 下拉滑动的时候，显示出来红色 */
+    top: -300px;
+    height: 400px;
     width: 100%;
     background: ${style["theme-color"]};
   }
