@@ -33,10 +33,19 @@ export const getBannerList = () => {
 export const getRecommendList = () => {
   return (dispatch) => {
     getRecommendListRequest().then(res => {
-      dispatch(changeRecommendList(res.result))
+      dispatch(changeRecommendList(res.result));
+      dispatch(changeEnterLoading(false))
     }).catch(() => {
       console.log('推荐歌单数据错误');
     })
   }
 };
+
+
+export const changeEnterLoading = (data) => ({
+  type: actionTypes.CHANGE_ENTER_LOADING,
+  data
+});
+
+
 
