@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, memo } from 'react';
+import React, { useRef, useEffect, memo } from 'react';
 import styled from'styled-components';
 import Scroll from '../scroll/index'
 import { PropTypes } from 'prop-types';
@@ -82,7 +82,8 @@ Horizen.defaultProps = {
   // 列表数据
   list: [],
   // 当前item值
-  // oldVal这个变量其实可以 就封装在这个组件里
+  // oldVal这个变量 为什么不 封装在这个组件里？
+  // 因为其他组件也需要这个值
   oldVal: '',
   title: '',
   handleClick: null

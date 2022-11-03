@@ -6,6 +6,7 @@ import { renderRoutes } from 'react-router-config';
 import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
+import { Data } from './application/Singers/data';
 
 function App() {
   return (
@@ -16,7 +17,9 @@ function App() {
         <IconStyle></IconStyle>
         {/* <i className="iconfont">&#xe6fc;</i> */}
         {/* 注册路由 */}
-        { renderRoutes(routes) }
+        <Data>
+          { renderRoutes(routes) }
+        </Data>
       </HashRouter>
     </Provider>
   )

@@ -68,7 +68,7 @@ const mapStateToProps = (state) => {
 
 // 映射 action 到 props
 const mapDispatchToProps = (dispatch) => {
-  console.log('69', dispatch)
+  // console.log('69', dispatch)
   return {
     getBannerDataDispatch() {
       dispatch(actionTypes.getBannerList())
