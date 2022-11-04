@@ -7,6 +7,7 @@ import * as actionTypes from './store/actionCreators';
 import { connect } from "react-redux";
 import { forceCheck } from 'react-lazyload';
 import Loading from '../../baseUI/loading/index';
+import { renderRoutes } from 'react-router-config';
 
 function Recommend (props) {
 
@@ -40,7 +41,7 @@ function Recommend (props) {
     // Content 就是 外部容器
     <Content>
       {/* onScroll={forceCheck} 随着页面滚动依次加载图片 */}
-      <Scroll className="list" onScroll={forceCheck}>
+      <Scroll className="list" onScroll={ forceCheck }>
         <div>
           {/* 轮播 */}
           <Slider bannerList={ bannerListJS }></Slider>
@@ -49,6 +50,7 @@ function Recommend (props) {
         </div>
       </Scroll>
       { enterLoading ? <Loading></Loading> : null }
+      { renderRoutes(props.route.routes) }
     </Content>
   )
 }

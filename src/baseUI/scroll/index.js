@@ -75,8 +75,8 @@ const Scroll = forwardRef((props, ref) => {
   // 上拉到底，调用上拉刷新的函数
   useEffect(() => {
     if (!bScroll || !onScroll) { return };
-    bScroll.on('scroll', () => {
-      onScroll();
+    bScroll.on('scroll', (scroll) => {
+      onScroll(scroll);
     });
 
     return () => {
