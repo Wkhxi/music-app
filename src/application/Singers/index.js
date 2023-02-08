@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import LazyLoad, { forceCheck } from 'react-lazyload';
 import { CategoryDataContext } from "./data";
 import { CHANGE_CATEGORY, CHANGE_ALPHA } from './data';
+import { renderRoutes } from 'react-router-config';
 
 const NavContainer  = styled.div`
   box-sizing: border-box;
@@ -66,6 +67,13 @@ function Singers (props) {
   let handlePullDown = () => {
     pullDownRefreshDispatch(category, alpha)
   };
+
+  /**
+   * 跳转详情
+   */
+  const enterDetail = (id) => {
+    props.history.push(`/singers/${id}`);
+  }
 
   // 歌手种类
  const categoryTypes = [{
@@ -244,7 +252,7 @@ function Singers (props) {
         {
           list.map((singer, index) => {
             return (
-              <ListItem key={ singer.accountId + '' + index }>
+              <ListItem key={ singer.accountId + '' + index } onClick = { () => enterDetail(singer.id) }>
                 <div className="img_wrapper">
                   {/* <img src={ `${singer.picUrl}?param=300*300` } width="100%" height="100%" alt="music" /> */}
                   <LazyLoad placeholder={<img width="100%" height="100%" src={require('./singer.png')} alt="music"/>}>
@@ -274,6 +282,7 @@ function Singers (props) {
           { renderSingerList () }
         </Scroll>
       </ListContainer>
+      { renderRoutes(props.route.routes) }
     </>
   )
 }

@@ -51,12 +51,12 @@ const filterIndex = (rankList) => {
 }
 
 //  根据name 找 排行榜的编号
-const filterIdx = (name, RankTypes) => {
-  for (var key in RankTypes) {
-    if (RankTypes[key] === name) return key;
-  }
-  return null;
-}
+// const filterIdx = (name, RankTypes) => {
+//   for (var key in RankTypes) {
+//     if (RankTypes[key] === name) return key;
+//   }
+//   return null;
+// }
 
 
 function Rank (props) {
@@ -79,12 +79,13 @@ function Rank (props) {
   const globalList = rankList.slice(globalStartIndex); // 全球榜单
 
   // 点击进入详情
-  const enterDetail = (name) => {
-    const idx = filterIdx(name, RankTypes);
-    if(idx === null) {
-      alert("暂无相关数据");
-      return;
-    }
+  const enterDetail = (detail) => {
+    // const idx = filterIdx(name, RankTypes);
+    // if(idx === null) {
+    //   alert("暂无相关数据");
+    //   return;
+    // }
+    props.history.push(`/rank/${detail.id}`)
   }
 
 // tracks 列表
@@ -107,7 +108,7 @@ function Rank (props) {
         {
           list.map((item, index) => {
             return (
-              <ListItem key={ `${item.coverImgId}${index}` } tracks={ item.tracks } onClick={ () => enterDetail(item.name) }>
+              <ListItem key={ `${item.coverImgId}${index}` } tracks={ item.tracks } onClick={ () => enterDetail(item) }>
                 <div className="img_wrapper">
                   <img src={ item.coverImgUrl } alt=""/>
                   <div className="decorate"></div>
