@@ -137,7 +137,7 @@ function Album(props) {
     setShowStatus(false);
   }, []);
   const handleScroll = useCallback((pos) => {
-    console.log('121', pos)
+    // console.log('121', pos)
     let minScrollY = -HEADER_HEIGHT;
     // 当向上滑动 y 距离 小于 45    即 opacity = 1  backgroundColor = ''
     // 当向上滑动 y 距离 大于 45    percent > 1    1 > (percent-1)/2 > 0  此时透明度为 (percent - 1) / 2
@@ -274,7 +274,7 @@ function Album(props) {
             )
             : null
         }
-        { enterLoading ? <Loading></Loading> : null}
+        { enterLoading ? <Loading></Loading> : null }
       </Container>
     </CSSTransition>
   )

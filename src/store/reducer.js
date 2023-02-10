@@ -5,6 +5,7 @@ import { reducer as singerReducer } from '../application/Singers/store';
 import { reducer as rankReducer } from '../application/Rank/store/index';
 import { reducer as albumReducer } from '../application/Album/store/index';
 import { reducer as singerInfoReducer } from '../application/Singer/store/index';
+import { reducer as playerReducer } from "../application/Player/store/index";
 
 export default combineReducers({
   // recommend下的reducer 注册到全局store中
@@ -12,5 +13,6 @@ export default combineReducers({
   singers: singerReducer,
   rank: rankReducer,
   album: albumReducer,
-  singerInfo: singerInfoReducer
+  singerInfo: singerInfoReducer,
+  player: playerReducer
 });

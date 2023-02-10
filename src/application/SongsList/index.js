@@ -1,15 +1,21 @@
 import React from 'react';
 import { SongList, SongItem } from "./style";
 import { getName } from '../../api/utils';
+import { changePlayList, changeCurrentIndex, changeSequencePlayList } from './../../application/Player/store/actionCreators';
+import { connect } from 'react-redux';
 
 const SongsList = React.forwardRef((props, refs)=> {
 
   const { collectCount, showCollect, songs } = props;
+  const { changePlayListDispatch, changeSequencePlayListDispatch, changeCurrentIndexDispatch } = props;
 
   const totalCount = songs.length;
 
   const selectItem = (e, index) => {
-    console.log(index);
+    // console.log('selectItem', songs, index);
+    changePlayListDispatch(songs);
+    changeSequencePlayListDispatch(songs);
+    changeCurrentIndexDispatch(index);
   }
 
   let songList = (list) => {
@@ -17,7 +23,7 @@ const SongsList = React.forwardRef((props, refs)=> {
     for(let i = 0; i < list.length; i++) {
       let item = list[i];
       res.push(
-        <li key={ item.id } onClick={(e) => selectItem(e, i)}>
+        <li key={ item.id } onClick={ (e) => selectItem(e, i) }>
           <span className="index">{i + 1}</span>
           <div className="info">
             <span>{item.name}</span>
@@ -47,7 +53,7 @@ const SongsList = React.forwardRef((props, refs)=> {
   return (
     <SongList ref={refs} showBackground={props.showBackground}>
       <div className="first_line">
-        <div className="play_all" onClick={(e) => selectItem(e, 0)}>
+        <div className="play_all" onClick={ (e) => selectItem(e, 0) }>
           <i className="iconfont">&#xe6e3;</i>
           <span>播放全部 <span className="sum">(共{totalCount}首)</span></span>
         </div>
@@ -60,4 +66,21 @@ const SongsList = React.forwardRef((props, refs)=> {
   )
 });
 
-export default React.memo(SongsList);
+
+
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changePlayListDispatch(data){
+      dispatch(changePlayList(data));
+    },
+    changeCurrentIndexDispatch(data) {
+      dispatch(changeCurrentIndex(data));
+    },
+    changeSequencePlayListDispatch(data) {
+      dispatch(changeSequencePlayList(data))
+    }
+  }
+};
+
+export default connect(null, mapDispatchToProps)(React.memo(SongsList));
