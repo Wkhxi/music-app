@@ -10,6 +10,7 @@ import { HEADER_HEIGHT } from "./../../api/config";
 import { connect } from 'react-redux';
 import { getSingerInfo, changeEnterLoading } from "./store/actionCreators";
 import Loading from "./../../baseUI/loading/index";
+import MusicNote from "../../baseUI/music-note/index";
 
 
 function Singer(props) {
@@ -148,8 +149,8 @@ function Singer(props) {
   //   ]
   // }
   const {
-    artist: immutableArtist, 
-    songs: immutableSongs, 
+    artist: immutableArtist,
+    songs: immutableSongs,
     loading
   } = props;
   const { getSingerDataDispatch } = props;
@@ -168,6 +169,9 @@ function Singer(props) {
   const initialHeight = useRef(0);
   // 往上偏移的尺寸，露出圆角
   const OFFSET = 5;
+
+  const musicNoteRef = useRef ();
+
 
   useEffect(() => {
     const id = props.match.params.id;
@@ -237,6 +241,10 @@ function Singer(props) {
     setShowStatus (false);
   }, []);
 
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y });
+  };
+
 
   return (
     <CSSTransition
@@ -266,9 +274,11 @@ function Singer(props) {
             <SongsList
               songs={ songs }
               showCollect={ false }
+              musicAnimation={ musicAnimation }
             ></SongsList>
           </Scroll>
         </SongListWrapper>
+        <MusicNote ref={ musicNoteRef }></MusicNote>
         { loading ? (<Loading></Loading>) : null}
       </Container>
     </CSSTransition>

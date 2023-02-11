@@ -12,9 +12,14 @@ function MiniPlayer (props) {
 
   // song 当前播放歌曲
   const { song, fullScreen, playing, percent } =  props;
-  const { toggleFullScreen, clickPlaying } = props;
+  const { toggleFullScreen, clickPlaying, togglePlayList } = props;
 
   const miniPlayerRef = useRef();
+
+  const handleTogglePlayList = (e) => {
+    togglePlayList(true);
+    e.stopPropagation();
+  };
 
 
   /**
@@ -75,7 +80,7 @@ function MiniPlayer (props) {
             }
           </ProgressCircle>
         </div>
-        <div className="control">
+        <div className="control" onClick={ handleTogglePlayList }>
           <i className="iconfont">&#xe640;</i>
         </div>
       </MiniPlayerContainer>

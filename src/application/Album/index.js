@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { getAlbumList, changeEnterLoading } from './store/actionCreators';
 import Loading from '../../baseUI/loading/index';
 import SongsList from '../SongsList';
-
+import MusicNote from "../../baseUI/music-note/index";
 
 
 // export const getName = list => {
@@ -115,6 +115,7 @@ function Album(props) {
   const id = props.match.params.id;
   const { currentAlbum: currentAlbumImmutable, enterLoading } = props;
   const { getAlbumDataDispatch } = props;
+  const musicNoteRef = useRef ();
   useEffect (() => {
     getAlbumDataDispatch(id);
   }, [getAlbumDataDispatch, id]);
@@ -157,6 +158,10 @@ function Album(props) {
       setIsMarquee(false);
     }
   }, [currentAlbum]);
+
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y });
+  };
 
   /**
    * render拆分
@@ -268,12 +273,14 @@ function Album(props) {
                     collectCount={ currentAlbum.subscribedCount }
                     showCollect={ true }
                     showBackground={ true }
+                    musicAnimation={ musicAnimation }
                   ></SongsList>
                 </div>
               </Scroll>
             )
             : null
         }
+        <MusicNote ref={ musicNoteRef }></MusicNote>
         { enterLoading ? <Loading></Loading> : null }
       </Container>
     </CSSTransition>

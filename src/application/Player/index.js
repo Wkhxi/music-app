@@ -14,6 +14,8 @@ import NormalPlayer from './normalPlayer';
 import { getSongUrl, isEmptyObject, findIndex, shuffle } from "../../api/utils";
 import Toast from "./../../baseUI/toast/index";
 import { playMode } from '../../api/config';
+import PlayList from './play-list/index';
+import { getLyricRequest } from "../../api/request";
 
 
 
@@ -101,7 +103,7 @@ function Player (props) {
   // ];
 
   const { fullScreen, playing, currentSong: immutableCurrentSong, playList: immutablePlayList, currentIndex, mode, sequencePlayList: immutableSequencePlayList } = props;
-  const { toggleFullScreenDispatch, togglePlayingDispatch,  changeCurrentIndexDispatch, changeCurrentDispatch, changeModeDispatch, changePlayListDispatch } = props;
+  const { toggleFullScreenDispatch, togglePlayingDispatch,  changeCurrentIndexDispatch, changeCurrentDispatch, changeModeDispatch, changePlayListDispatch, togglePlayListDispatch } = props;
   const currentSong = immutableCurrentSong.toJS();
   const playList = immutablePlayList.toJS();
   const sequencePlayList = immutableSequencePlayList.toJS();
@@ -115,12 +117,34 @@ function Player (props) {
   let percent = isNaN(currentTime / duration) ? 0 : currentTime / duration;
 
   const [preSong, setPreSong] = useState({});
-  const [modeText, setModeText] = useState("");
+  const [modeText, setModeText] = useState('');
+  const [songReady, setSongReady] = useState(true); // audio 标签拿到 src 加载到能够播放之间有一个缓冲的过程
 
 
 
   const audioRef = useRef();
   const toastRef = useRef();
+
+  /**
+   * 获取歌词
+   */
+  const currentLyric = useRef ();
+  const getLyric = id => {
+    let lyric = '';
+    getLyricRequest(id)
+      .then(data => {
+        console.log('lyric', data)
+        lyric = data.lrc.lyric;
+        if (!lyric) {
+          currentLyric.current = null;
+          return;
+        }
+      })
+      .catch (() => {
+        songReady.current = true;
+        audioRef.current.play();
+      });
+  };
 
 
   useEffect(() => {
@@ -128,18 +152,23 @@ function Player (props) {
     // if(!currentSong) return;
     // changeCurrentIndexDispatch(0); //currentIndex默认为-1，临时改成0
 
-    if (!playList.length || currentIndex === -1 || !playList[currentIndex] || playList[currentIndex].id === preSong.id) {
+    if (!playList.length || currentIndex === -1 || !playList[currentIndex] || playList[currentIndex].id === preSong.id || !songReady) {
       return;
     }
     let current = playList[currentIndex];
     changeCurrentDispatch(current); //赋值currentSong
     setPreSong(current);
+    setSongReady(false)
 
     audioRef.current.src = getSongUrl(current.id);
     setTimeout(() => {
-      audioRef.current.play();
+      audioRef.current.play().then(() => {
+        setSongReady(true)
+      });
     });
     togglePlayingDispatch(true); //播放状态
+
+    getLyric(current.id); // 获取歌词
     setCurrentTime(0); //从头开始播放
 
     // 一个数 和 0 按位或， 整数可以保持自身，小数可以取整
@@ -174,6 +203,10 @@ function Player (props) {
       handleNext();
     }
   }
+  const handleError = () => {
+    setSongReady(true);
+    alert ("播放出错");
+  };
 
   /**
    * 手动改变滚动条，更新当前时间，更新进度
@@ -263,6 +296,7 @@ function Player (props) {
           percent={ percent }
           toggleFullScreen={ toggleFullScreenDispatch }
           clickPlaying={ clickPlaying }
+          togglePlayList={ togglePlayListDispatch }
         />
       }
 
@@ -283,12 +317,14 @@ function Player (props) {
           handlePrev={ handlePrev }
           handleNext={ handleNext }
           changeMode={ changeMode }
+          togglePlayList={ togglePlayListDispatch }
         />
       }
 
 
-      <audio ref={ audioRef } onTimeUpdate={ updateTime } onEnded={ handleEnd }></audio>
+      <audio ref={ audioRef } onTimeUpdate={ updateTime } onEnded={ handleEnd } onError={ handleError } autoPlay></audio>
       <Toast text={ modeText } ref={ toastRef }></Toast>
+      <PlayList></PlayList>
     </div>
   )
 }

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 const SongsList = React.forwardRef((props, refs)=> {
 
   const { collectCount, showCollect, songs } = props;
-  const { changePlayListDispatch, changeSequencePlayListDispatch, changeCurrentIndexDispatch } = props;
+  const { changePlayListDispatch, changeSequencePlayListDispatch, changeCurrentIndexDispatch, musicAnimation } = props;
 
   const totalCount = songs.length;
 
@@ -16,6 +16,8 @@ const SongsList = React.forwardRef((props, refs)=> {
     changePlayListDispatch(songs);
     changeSequencePlayListDispatch(songs);
     changeCurrentIndexDispatch(index);
+
+    musicAnimation(e.nativeEvent.clientX, e.nativeEvent.clientY);
   }
 
   let songList = (list) => {

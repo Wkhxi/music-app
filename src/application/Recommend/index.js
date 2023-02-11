@@ -13,7 +13,7 @@ function Recommend (props) {
 
   console.log('12', props)
 
-  const { bannerList, recommendList, enterLoading } = props;
+  const { bannerList, recommendList, enterLoading, songsCount } = props;
   const { getBannerDataDispatch, getRecommendListDataDispatch } = props
 
 
@@ -39,7 +39,7 @@ function Recommend (props) {
   return (
     // better-scroll 的原理，就是在容器元素高度固定，当子元素高度超过容器元素高度时，通过 transfrom 动画产生滑动效果
     // Content 就是 外部容器
-    <Content>
+    <Content play={ songsCount }>
       {/* onScroll={forceCheck} 随着页面滚动依次加载图片 */}
       <Scroll className="list" onScroll={ forceCheck }>
         <div>
@@ -63,7 +63,8 @@ const mapStateToProps = (state) => {
   return {
     bannerList: state.recommend.getIn(['bannerList']),
     recommendList: state.recommend.getIn(['recommendList']),
-    enterLoading: state.recommend.getIn(['enterLoading'])
+    enterLoading: state.recommend.getIn(['enterLoading']),
+    songsCount: state.player.getIn(['playList']).size
   }
 }
 
